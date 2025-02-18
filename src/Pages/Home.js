@@ -1,5 +1,5 @@
 import React from 'react'
-import FileUploader from '../Components/FileUploader';
+import FileUploader from '../Components/FileUploader.tsx';
 
 export const Home = () => {
 
