@@ -1,15 +1,17 @@
 import axios from 'axios';
 import { ChangeEvent, useState } from "react";
 import './FileUploader.css';
-import tailwindcss from '@tailwindcss/vite';
 
-type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
+// UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
 
 export default function FileUploader() {
 
     const [file, setFile] = useState(null);
-    const [status, setStatus] = useState<UploadStatus>('idle');
+    const [fileName, setFileName] = useState('')
+    const [fileContent, setFileContent] = useState('')
+    const [status, setStatus] = useState('idle');
     const [uploadProgress, setUploadProgress] = useState(0);
+
 
     function handleFileChange(e) {
         if(e.target.files) { // all the files that are currently in the input. i.e. if there is an input file
@@ -41,6 +43,18 @@ export default function FileUploader() {
             
             setStatus("success");
             setUploadProgress(100);
+
+            // parsing start
+            const reader = new FileReader();
+            reader.readAsText(file)
+            reader.onload = () => {
+                setFileName(file.name)
+                setFileContent(reader.result)
+            }
+            reader.onerror = () => {
+                console.log('file error', reader.error)
+            }
+
         } catch {
             setStatus("error");
             setUploadProgress(0);
@@ -76,7 +90,14 @@ export default function FileUploader() {
             )}
 
             {status === 'success' && (
-                <p className="text-sm text-green-600">File uploaded successfully!</p>
+                <div>
+                    <p className="text-sm text-green-600">File uploaded successfully!</p>
+                    <br></br>
+                    <p>File name: {fileName}</p>
+                    <p>File content: </p>
+                    <br></br>
+                    <p>{fileContent}</p>
+                </div>
             )}
 
             {status === 'error' && (
