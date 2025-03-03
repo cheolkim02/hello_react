@@ -1,4 +1,9 @@
 {
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "name": "hello_react",
   "version": "0.1.0",
   "private": true,
@@ -8,6 +13,7 @@
     "cra-template": "1.2.0",
     "cssstyle": "^4.2.1",
     "file-saver": "^2.0.5",
+    "fs": "^0.0.1-security",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",

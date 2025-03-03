@@ -1,5 +1,6 @@
 import { useState } from "react";
 import * as XLSX from "xlsx"
+import { writeFile } from "fs";
 
 function UploadExcelFile() {
 
@@ -21,39 +22,11 @@ function UploadExcelFile() {
       fromAbroad: '',
       militaryState: ''
     };
-    var humansList = []
+    const humansList = []
 
+    var dataLength=0;
     const [data, setData] = useState([]);
-    const [human, setHuman] = useState({
-      name: 'a',
-      studentID: 0,
-      promotionDate: null,
-      studyingWhats: [],
-      nationality: '대한민국',
-      phoneNumber: '',
-      churchAttending: '',
-      birthday: null,
-      studyState: '재학',
-      sex: false,
-      isOut: false,
-      inKakaoTalk: true,
-      funnel: '',
-      activityState: '',
-      fromAbroad: '',
-      militaryState: ''
-    });
-
-
-
-    function checkReady() {
-      if(data.length) {
-        updateHuman();
-      }
-      else {
-        alert(data.length);
-        setTimeout(checkReady, 1000);
-      }
-    }
+    const [human, setHuman] = useState(humanType);
 
     async function handleFile(e) {
       const reader = new FileReader();
@@ -68,31 +41,26 @@ function UploadExcelFile() {
       }
     }
 
-    const updateHuman = (i) => {
-      setHuman(previousState => {
-        return {
-          ...previousState,
-          name: data[i]["name"],
-          studentID: 202231155555
-        }
-      });
+    function updateHuman() {
+      setHuman(data[0]);
+      humansList.push(human);
     }
 
-    function doTheThing() {
-      alert(data.length)
-      for(var i=0; i<data.length; i++) {
-        updateHuman(i);
-        alert(human.name)
-        humansList.push(Object.values(human));
+    function getDataLength() {
+      for(var i=0; i<30; i++) {
+         if(data[i]["name"]!="") {
+            dataLength++;
+         }
       }
-      
+      alert(dataLength);
     }
 
-    function printHumansList() {
-      humansList.forEach(function(entry) {
-        console.log(entry);
-      })
+    function printHumanList() {
+      for(var i=0; i<dataLength; i++) {
+        console.log(JSON.stringify(humansList[i]));
+      }
     }
+
 
     return (
         <div>
@@ -101,6 +69,7 @@ function UploadExcelFile() {
                 accept = '.xlsx, .xls'
                 onChange = {handleFile}
             />
+
             <br></br>
             {data.length > 0 && (
               <table className="table">
@@ -126,14 +95,13 @@ function UploadExcelFile() {
             {JSON.stringify(data[0])}
             <br></br>
             <br></br>
-            <p>
-              {human.name}
-              {human.studentID}
-            </p>
+            {JSON.stringify(human)}
+            <br></br>
             <br></br>
             <p>-----------</p>
-            <button onClick={doTheThing}>Do the thing!</button>
-            <button onClick={printHumansList}>print humans list</button>
+            <button onClick={getDataLength}>update data length</button>
+            <button onClick={updateHuman}>update human</button>
+            <button onClick={printHumanList}>print human list</button>
             <p>-----------</p>
             <p></p>
 
